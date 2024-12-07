@@ -1,0 +1,102 @@
+using System;
+
+namespace PolynomialApp
+{
+    public class CubicPolynomial
+    {
+        // Поля для коефіцієнтів многочлена
+        private double a3, a2, a1, a0;
+
+        // Конструктор для встановлення коефіцієнтів
+        public CubicPolynomial(double a3, double a2, double a1, double a0)
+        {
+            this.a3 = a3;
+            this.a2 = a2;
+            this.a1 = a1;
+            this.a0 = a0;
+        }
+
+        // Метод для обчислення значення полінома в точці x
+        public double Calculate(double x)
+        {
+            return a3 * Math.Pow(x, 3) + a2 * Math.Pow(x, 2) + a1 * x + a0;
+        }
+
+        // Метод для пошуку мінімального значення на відрізку [a, b] з точністю E
+        public double FindMinimum(double a, double b, double epsilon)
+        {
+            double minValue = Calculate(a);
+            for (double x = a; x <= b; x += epsilon)
+            {
+                double value = Calculate(x);
+                if (value < minValue)
+                {
+                    minValue = value;
+                }
+            }
+            return minValue;
+        }
+    }
+
+    public static class Localizer
+    {
+        // Метод для виведення локалізованих повідомлень
+        public static string GetLocalizedMessage(string key)
+        {
+            switch (key)
+            {
+                case "EnterCoefficientA3": return "Введiть коефiцiєнт a3: ";
+                case "EnterCoefficientA2": return "Введiть коефiцiєнт a2: ";
+                case "EnterCoefficientA1": return "Введiть коефiцiєнт a1: ";
+                case "EnterCoefficientA0": return "Введiть коефiцiєнт a0: ";
+                case "EnterSegmentStart": return "Введiть початок вiдрiзку (a): ";
+                case "EnterSegmentEnd": return "Введiть кiнець вiдрiзку (b): ";
+                case "EnterEpsilon": return "Введiть точнiсть (epsilon): ";
+                case "MinimumValue": return "Мiнiмальне значення на вiдрiзку [{0}, {1}] з точнiстю {2}: {3}";
+                case "PressAnyKey": return "Натиснiть будь-яку клавiшу для виходу.";
+                default: return string.Empty;
+            }
+        }
+    }
+
+    class Program
+    {
+        static void Main()
+        {
+            // Введення коефіцієнтів
+            Console.WriteLine(Localizer.GetLocalizedMessage("EnterCoefficientA3"));
+            double a3 = Convert.ToDouble(Console.ReadLine());
+
+            Console.WriteLine(Localizer.GetLocalizedMessage("EnterCoefficientA2"));
+            double a2 = Convert.ToDouble(Console.ReadLine());
+
+            Console.WriteLine(Localizer.GetLocalizedMessage("EnterCoefficientA1"));
+            double a1 = Convert.ToDouble(Console.ReadLine());
+
+            Console.WriteLine(Localizer.GetLocalizedMessage("EnterCoefficientA0"));
+            double a0 = Convert.ToDouble(Console.ReadLine());
+
+            // Створення об'єкта класу
+            CubicPolynomial polynomial = new CubicPolynomial(a3, a2, a1, a0);
+
+            // Введення відрізку [a, b] та точності E
+            Console.WriteLine(Localizer.GetLocalizedMessage("EnterSegmentStart"));
+            double a = Convert.ToDouble(Console.ReadLine());
+
+            Console.WriteLine(Localizer.GetLocalizedMessage("EnterSegmentEnd"));
+            double b = Convert.ToDouble(Console.ReadLine());
+
+            Console.WriteLine(Localizer.GetLocalizedMessage("EnterEpsilon"));
+            
+            double epsilon = Convert.ToDouble(Console.ReadLine());
+
+            // Знаходження мінімального значення
+            double minValue = polynomial.FindMinimum(a, b, epsilon);
+            Console.WriteLine(Localizer.GetLocalizedMessage("MinimumValue"), a, b, epsilon, minValue);
+
+            // Чекати на нажаття будь-якої клавіші
+            Console.WriteLine(Localizer.GetLocalizedMessage("PressAnyKey"));
+            Console.ReadKey();
+        }
+    }
+}
